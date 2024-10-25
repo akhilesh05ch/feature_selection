@@ -1,0 +1,8 @@
+X_train_backward, X_test_backward, y_train_backward, y_test_backward = train_test_split(
+    backward_selected_data, y, test_size=0.2, random_state=42
+)
+model_backward = LogisticRegression()
+model_backward.fit(X_train_backward, y_train_backward)
+y_pred_backward = model_backward.predict(X_test_backward)
+accuracy_backward = accuracy_score(y_test_backward, y_pred_backward)
+print(f"Accuracy (Backward Selection): {accuracy_backward}")

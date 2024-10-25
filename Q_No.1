@@ -1,0 +1,27 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+data = pd.read_csv('diabetes.csv')
+print(data)
+X = data.drop('Outcome', axis=1)
+y = data['Outcome']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = LogisticRegression()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy}")
+Accuracy: 0.7467532467532467
+missing_percentage = data.isnull().mean() * 100
+columns_to_keep = missing_percentage[missing_percentage <= 30].index
+data_reduced = data[columns_to_keep]
+data_reduced = data_reduced.dropna()
+X_reduced = data_reduced.drop('Outcome', axis=1)
+y_reduced = data_reduced['Outcome']
+X_train_reduced, X_test_reduced, y_train_reduced, y_test_reduced = train_test_split(X_reduced, y_reduced, test_size=0.2, random_state=42)
+model_reduced = LogisticRegression(max_iter=1000)
+model_reduced.fit(X_train_reduced, y_train_reduced)
+y_pred_reduced = model_reduced.predict(X_test_reduced)
+accuracy_reduced = accuracy_score(y_test_reduced, y_pred_reduced)
+print(f"Accuracy with reduced feature set: {accuracy_reduced:.4f}")

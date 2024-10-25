@@ -1,0 +1,6 @@
+from sklearn.feature_selection import VarianceThreshold
+selector = VarianceThreshold(threshold=0.5)
+X_filtered = filtered_data.drop('Outcome', axis=1)
+selector.fit(X_filtered)
+selected_features = X_filtered.columns[selector.get_support(indices=True)]
+final_filtered_data = filtered_data[selected_features]

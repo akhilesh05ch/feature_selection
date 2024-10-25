@@ -1,0 +1,23 @@
+from sklearn.feature_selection import SequentialFeatureSelector
+from sklearn.linear_model import LogisticRegression
+
+X = final_filtered_data
+y = filtered_data['Outcome']
+model = LogisticRegression()
+sfs_forward = SequentialFeatureSelector(model, direction='forward', n_features_to_select='auto', scoring='accuracy')
+sfs_forward.fit(X, y)
+selected_features_forward = X.columns[sfs_forward.get_support()]
+forward_selected_data = X[selected_features_forward]
+sfs_backward = SequentialFeatureSelector(model, direction='backward', n_features_to_select='auto', scoring='accuracy')
+sfs_backward.fit(X, y)
+selected_features_backward = X.columns[sfs_backward.get_support()]
+backward_selected_data = X[selected_features_backward]
+X_train_forward, X_test_forward, y_train_forward, y_test_forward = train_test_split(
+    forward_selected_data, y, test_size=0.2, random_state=42
+)
+model_forward = LogisticRegression()
+model_forward.fit(X_train_forward, y_train_forward)
+y_pred_forward = model_forward.predict(X_test_forward)
+accuracy_forward = accuracy_score(y_test_forward, y_pred_forward)
+print(f"Accuracy (Forward Selection): {accuracy_forward}")
+

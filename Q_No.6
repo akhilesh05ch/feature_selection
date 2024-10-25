@@ -1,0 +1,12 @@
+from sklearn.feature_selection import VarianceThreshold
+selector = VarianceThreshold(threshold=0.1)
+X_variance_filtered = selector.fit_transform(X_train)
+selected_features = X_train.columns[selector.get_support()]
+X_train_variance_filtered = X_train[selected_features]
+X_test_variance_filtered = X_test[selected_features]
+model_variance_filtered = LinearRegression()
+model_variance_filtered.fit(X_train_variance_filtered, y_train)
+y_pred_variance_filtered = model_variance_filtered.predict(X_test_variance_filtered)
+rmse_variance_filtered = mean_squared_error(y_test, y_pred_variance_filtered, squared=False)
+print(f"RMSE with variance filtered columns: {rmse_variance_filtered}")
+
